@@ -1,0 +1,7 @@
+[package]
+name = "cat-rest-v2"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+warp = { version = "0.3.7", features = ["tls"] }
