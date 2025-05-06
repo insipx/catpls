@@ -1,3 +1,11 @@
+mod bot;
+mod rest;
+mod content;
+
 fn main() {
-    println!("Hello, world!");
+    std::thread::scope(|s| {
+        s.spawn(|| {
+            rest::web_server()
+        });
+    });
 }

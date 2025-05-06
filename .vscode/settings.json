@@ -1,0 +1,11 @@
+{
+  "rust-analyzer": {
+    "cargo": {
+      "sysroot": "discover",
+      "buildScripts.enable": false,
+      "allTargets": true
+    },
+    "linkedProjects": ["Cargo.toml"],
+    "procMacro.enable": false
+  }
+}

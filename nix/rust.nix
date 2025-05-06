@@ -16,10 +16,14 @@
       ];
     in
     {
-      rust-project.crates."cat-rest-v2" = {
+      rust-project.crates."catpls" = {
         imports = [ ];
         crane = {
           args = {
+            OPENSSL_DIR = "${pkgs.openssl.dev}";
+            OPENSSL_LIB_DIR = "${pkgs.lib.getLib pkgs.openssl}/lib";
+            OPENSSL_NO_VENDOR = 1;
+            nativeBuildInputs = [ pkgs.pkg-config ];
             buildInputs =
               lib.optionals isDarwin
                 [
@@ -34,6 +38,6 @@
       rust-project = {
         inherit toolchain;
       };
-      packages.default = self'.packages.cat-rest-v2;
+      packages.default = self'.packages.catpls;
     };
 }

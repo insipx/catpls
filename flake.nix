@@ -3,7 +3,7 @@
 
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOs/nixpkgs/nixpkgs-unstable";
     rust-flake.url = "github:juspay/rust-flake";
     fenix = {
       url = "github:nix-community/fenix";

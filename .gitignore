@@ -2,3 +2,6 @@
 
 .direnv
 .direnv/**
+
+result
+result/**
