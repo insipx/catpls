@@ -1,13 +1,25 @@
 use std::collections::HashMap;
 
-use color_eyre::eyre::{eyre, Result};
+use color_eyre::eyre::{
+    Result,
+    eyre,
+};
 use prost::Message;
-use ring::aead;
-use ring::aead::NonceSequence;
-use ring::aead::{BoundKey, Nonce, NONCE_LEN};
+use ring::aead::{
+    BoundKey,
+    NONCE_LEN,
+    Nonce,
+    NonceSequence,
+};
 use ring::error::Unspecified;
-use ring::hkdf;
-use xmtp_proto::xmtp::mls::message_contents::{ContentTypeId, EncodedContent};
+use ring::{
+    aead,
+    hkdf,
+};
+use xmtp_proto::xmtp::mls::message_contents::{
+    ContentTypeId,
+    EncodedContent,
+};
 
 /// Create a new message according to the xmtp content type
 pub fn new_attachment(buffer: &[u8], mime_type: &str, filename: &str) -> Vec<u8> {
@@ -85,7 +97,7 @@ pub fn new_salt() -> [u8; 16] {
 }
 
 /// Encrypts buffer in-place
-pub fn encrypt(mut buffer: &mut Vec<u8>, secret: &[u8], salt: [u8; 16], nonce: u32) -> Result<()> {
+pub fn encrypt(buffer: &mut Vec<u8>, secret: &[u8], salt: [u8; 16], nonce: u32) -> Result<()> {
     assert_eq!(secret.len(), aead::AES_256_GCM.key_len());
     // No info parameter
     let hkdf_no_info = &[];
@@ -94,12 +106,9 @@ pub fn encrypt(mut buffer: &mut Vec<u8>, secret: &[u8], salt: [u8; 16], nonce: u
     let prk = salt.extract(&secret);
     // Derive the key for AES-256-GCM
     let mut derived_key = [0u8; 32]; // AES-256 needs 32 bytes
-    let okm_key = prk
-        .expand(hkdf_no_info, hkdf::HKDF_SHA256)
-        .map_err(|_| eyre!("HKDF expand failed"))?;
-    okm_key
-        .fill(&mut derived_key)
-        .map_err(|_| eyre!("HKDF fill failed"))?;
+    let okm_key =
+        prk.expand(hkdf_no_info, hkdf::HKDF_SHA256).map_err(|_| eyre!("HKDF expand failed"))?;
+    okm_key.fill(&mut derived_key).map_err(|_| eyre!("HKDF fill failed"))?;
 
     // The derived key can now be used with AES-256-GCM via the ring crate
     let key = aead::UnboundKey::new(&aead::AES_256_GCM, &derived_key)
@@ -107,9 +116,7 @@ pub fn encrypt(mut buffer: &mut Vec<u8>, secret: &[u8], salt: [u8; 16], nonce: u
 
     let mut key = aead::SealingKey::new(key, CounterNonceSequence(0));
     let aad = aead::Aad::from(b"~~ super secret cat pic ( 0 _ 0 ) ~~");
-    let tag = key
-        .seal_in_place_append_tag(aad, buffer)
-        .map_err(|_| eyre!("encryption failed"))?;
+    let tag = key.seal_in_place_append_tag(aad, buffer).map_err(|_| eyre!("encryption failed"))?;
     Ok(())
 }
 

@@ -7,7 +7,7 @@ description = "catpls.eth bot"
 [dependencies]
 color-eyre = "0.6.3"
 hex = "0.4.3"
-prost = "0.13.5"
+prost = "0.14.1"
 rand = "0.9.1"
 ring = "0.17.14"
 serde = "1.0.219"
@@ -16,13 +16,21 @@ ureq = "3.0.11"
 uuid = { version = "1.16.0", features = ["v4"] }
 warp = { version = "0.3.7", features = ["tls"] }
 xmtp_mls = { git = "https://github.com/xmtp/libxmtp", branch = "main" }
+xmtp_id = { git = "https://github.com/xmtp/libxmtp", branch = "main" }
 xmtp_proto = { git = "https://github.com/xmtp/libxmtp", branch = "main" }
-aws-sdk-s3 = "1.83"
-aws-config = { version = "1.1.7", features = ["behavior-version-latest"] }
+aws-sdk-s3 = "1.112"
+aws-sdk-kms = "1.94"
+aws-config = { version = "1.8", features = ["behavior-version-latest"] }
 tokio = { version = "1" }
 tracing = "0.1.41"
 futures = "0.3"
 tracing-subscriber = "0.3.19"
+directories = "6.0"
+alloy = { version = "1.1", default-features = false, features = [
+  "signers",
+  "signer-aws",
+] }
+async-trait = "0.1.89"
 
 [dev-dependencies]
 tokio = "1.44"

@@ -24,14 +24,7 @@
             OPENSSL_LIB_DIR = "${pkgs.lib.getLib pkgs.openssl}/lib";
             OPENSSL_NO_VENDOR = 1;
             nativeBuildInputs = [ pkgs.pkg-config ];
-            buildInputs =
-              lib.optionals isDarwin
-                [
-                  apple_sdk.frameworks.Security
-                ]
-              ++ [
-                pkgs.openssl
-              ];
+            buildInputs = [ pkgs.openssl ];
           };
         };
       };

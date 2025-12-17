@@ -10,7 +10,7 @@
       inputs = { nixpkgs.follows = "nixpkgs"; };
     };
     rust-manifest = {
-      url = "https://static.rust-lang.org/dist/channel-rust-stable.toml";
+      url = "https://static.rust-lang.org/dist/channel-rust-nightly.toml";
       flake = false;
     };
   };
@@ -24,11 +24,11 @@
       ];
       systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
       perSystem = { self', inputs', pkgs, ... }: {
-        # _module.args.pkgs = import inputs.nixpkgs pkgConfig;
         devShells.default = pkgs.mkShell {
           inputsFrom = [ self'.devShells.rust ];
           packages = [
             inputs'.fenix.packages.rust-analyzer
+            pkgs.aws-signing-helper
           ];
         };
       };

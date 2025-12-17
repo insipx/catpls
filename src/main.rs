@@ -1,9 +1,16 @@
 mod bot;
-mod rest;
+mod config;
 mod content;
-
-use color_eyre::eyre::{eyre, Result};
+mod rest;
+use color_eyre::eyre::{
+    Result,
+    eyre,
+};
+pub(crate) use config::aws_config;
 use tokio::task::JoinHandle;
+
+#[macro_use]
+extern crate tracing;
 
 async fn flatten<T>(handle: JoinHandle<Result<T>>) -> Result<T> {
     match handle.await {
@@ -18,7 +25,7 @@ async fn main() -> Result<()> {
     tracing_subscriber::fmt().pretty().init();
     tokio::try_join!(
         flatten(tokio::task::spawn(rest::web_server())),
-        flatten(tokio::task::spawn(bot::catbot()))
+        // flatten(tokio::task::spawn(bot::catbot()))
     )?;
     Ok(())
 }
